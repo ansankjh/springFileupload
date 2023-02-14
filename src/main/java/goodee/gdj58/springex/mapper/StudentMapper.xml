@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="goodee.gdj58.springex.mapper.StudentMapper">
+
+	<!-- insert 실행 후 키값이 입력값에 참조가 발생되어야 한다. -->
+	<insert id="insertStudent" parameterType="goodee.gdj58.springex.vo.Student" keyProperty="studentNo">
+		<!-- mariadb에서는 insert 전/후 auto_increment값을 입력된 매개변수로 참조 가능 -->
+		<selectKey resultType="int" keyProperty="studentNo" keyColumn="student_no" order="AFTER">
+			<!-- LAST_INSERT_ID() 마지막 auto_increment값을 반환하는 함수 -->
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO student(
+			student_id, student_pw, student_name
+		) VALUES (
+			#{studentId}, PASSWORD(#{studentPw}), #{studentName}
+		)
+	</insert>
+
+	<!-- 일반적인 mybatis insert 쿼리 
+	<insert id="insertStudent" parameterType="goodee.gdj58.springex.vo.Student">
+		INSERT INTO student(
+			student_id, student_pw, student_name
+		) VALUES (
+			#{studentId}, #{studentPw}, #{studentName}
+		)
+	</insert>
+	-->
+</mapper>
